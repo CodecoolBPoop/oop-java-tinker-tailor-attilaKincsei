@@ -3,82 +3,71 @@ package com.codecool;
 import java.util.*;
 
 class TinkerTailor {
-    List<Integer> inputList;
+    LinkedList<Integer> inputList;
     List<Integer> resultList;
-    int[] resultArray;
+    Integer[] resultArray;
 
-    void convertArrayToList(int[] input) {
+    void convertArrayToList(Integer[] input) {
         inputList = new LinkedList<>();
         for (int item : input) {
             inputList.add(item);
         }
     }
 
-    int[] convertListToArray(List<Integer> list) {
-        int arrayIndex = 0;
-        int[] tempArray = new int[list.size()];
-        for (Integer number : list) {
-            tempArray[arrayIndex] = number;
-            arrayIndex++;
-        }
-        return tempArray;
-    }
-
-    int[] countingGamer(int[] inputArray, int k) {
+    Integer[] countingGamer(Integer[] inputArray, int k) {
         resultList = new LinkedList<>();
-
         convertArrayToList(inputArray);
 
-        int iterations = 0;
         ListIterator<Integer> iter = inputList.listIterator();
         do {
-            int removeIndex = 1;
-            int listLength = inputList.size();
+            int currentIndex = 1;
+            int indexOfLastRemoved = 1000000000;
+            Integer currentNumber = 1000000000;
             while (iter.hasNext()) {
-                Integer currentNumber = iter.next();
-                if (removeIndex % k == 0) {
+                currentNumber = iter.next();
+                if (currentIndex % k == 0) {
                     resultList.add(currentNumber);
+                    indexOfLastRemoved = iter.previousIndex();
                     iter.remove();
                 }
-                removeIndex++;
+                currentIndex++;
             }
 
-
-            for (int i = 0; i < k; i++) {
-                Integer toBeRemoved = iter.next();
-                int deletedIndex = iter.previousIndex();
-                if (deletedIndex == k - 1) {
-                    iter.remove();
-                    resultList.add(toBeRemoved);
-
-                    int excessLength = deletedIndex + k - inputList.size();
-                    if (excessLength > 0) {
-                        do {
-                            iter.previous();
-                        } while (iter.hasPrevious());
-                        Integer toBeRemoved2 = 1000000000;
-                        for (int j = 0; j < excessLength; j++) {
-                            toBeRemoved2 = iter.next();
-                        }
-                        resultList.add(toBeRemoved2);
-                        System.out.println("2. " + resultList);
-                        iter.remove();
-                    }
-                }
-
+            // Go back to beginning of list
+            while (iter.hasPrevious()) {
+                iter.previous();
             }
-            iterations++;
-        } while (iterations < 10);
+            currentIndex = 1;
 
-        resultArray = convertListToArray(resultList);
+            // Step forward as many times as the remainder of k
+            int iterForward = k % indexOfLastRemoved - 1;
+            for (int i = 0; i < iterForward; i++) {
+                currentNumber = iter.next();
+                currentIndex++;
+            }
+
+            if (iter.nextIndex() == 0) {
+                currentNumber = iter.next();
+                currentIndex++;
+            }
+            resultList.add(currentNumber);
+            iter.remove();
+        } while (inputList.size() > 1);
+
+        if (!inputList.isEmpty()) {
+            resultList.add(inputList.get(0));
+        }
+        resultArray = resultList.toArray(new Integer[0]);
         return resultArray;
     }
 
-    public static void main(String[] args) {
-        int[] sourceArray = new int[] {1, 2, 3, 4, 5};
-        int k = 3;
-
-        TinkerTailor testInstance = new TinkerTailor();
-        testInstance.countingGamer(sourceArray, k);
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int number : resultArray) {
+            sb.append(String.valueOf(number)).append(" ");
+        }
+        if (sb.length() > 0) sb.deleteCharAt(sb.length() - 1); // last space char
+        return sb.toString();
     }
 }
