@@ -25,33 +25,48 @@ class TinkerTailor {
     }
 
     int[] countingGamer(int[] inputArray, int k) {
-        int n = inputArray.length;
         resultList = new LinkedList<>();
 
         convertArrayToList(inputArray);
 
         int iterations = 0;
+        ListIterator<Integer> iter = inputList.listIterator();
         do {
-            ListIterator<Integer> iter = inputList.listIterator();
-            for (int i = 0; i < k; i++) {
-                if (!iter.hasNext()) {
-                    for (int j = 0; j < iter.previousIndex() - i; j++) {
-                        iter.previous();
-                    }
-                    System.out.println(iter.nextIndex());
+            int removeIndex = 1;
+            int listLength = inputList.size();
+            while (iter.hasNext()) {
+                Integer currentNumber = iter.next();
+                if (removeIndex % k == 0) {
+                    resultList.add(currentNumber);
                     iter.remove();
                 }
-                Integer toBeRemoved = iter.next();
-                if (iter.previousIndex() == k - 1) {
-                    resultList.add(inputList.get(iter.previousIndex()));
-                    iter.remove();
-//                    iter.previous();
-//                    iter.next();
-                    System.out.println(String.format("Element to be removed: %d", toBeRemoved));
-                }
+                removeIndex++;
             }
-            System.out.println("inputList = [" + inputList + "], k = [" + k + "]");
-            System.out.println("resultList = [" + resultList + "], k = [" + k + "]");
+
+
+            for (int i = 0; i < k; i++) {
+                Integer toBeRemoved = iter.next();
+                int deletedIndex = iter.previousIndex();
+                if (deletedIndex == k - 1) {
+                    iter.remove();
+                    resultList.add(toBeRemoved);
+
+                    int excessLength = deletedIndex + k - inputList.size();
+                    if (excessLength > 0) {
+                        do {
+                            iter.previous();
+                        } while (iter.hasPrevious());
+                        Integer toBeRemoved2 = 1000000000;
+                        for (int j = 0; j < excessLength; j++) {
+                            toBeRemoved2 = iter.next();
+                        }
+                        resultList.add(toBeRemoved2);
+                        System.out.println("2. " + resultList);
+                        iter.remove();
+                    }
+                }
+
+            }
             iterations++;
         } while (iterations < 10);
 
