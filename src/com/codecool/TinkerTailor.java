@@ -3,62 +3,69 @@ package com.codecool;
 import java.util.*;
 
 class TinkerTailor {
-    LinkedList<Integer> inputList;
-    List<Integer> resultList;
-    Integer[] resultArray;
+    private LinkedList<Integer> inputList = new LinkedList<>();
+    private List<Integer> resultList = new LinkedList<>();
+    private Integer[] resultArray = new Integer[0];
 
-    void convertArrayToList(Integer[] input) {
-        inputList = new LinkedList<>();
-        for (int item : input) {
-            inputList.add(item);
-        }
+    void clear() {
+        inputList.clear();
+        resultList.clear();
+        resultArray = null;
     }
 
-    Integer[] countingGamer(Integer[] inputArray, int k) {
-        resultList = new LinkedList<>();
-        convertArrayToList(inputArray);
+    void countingGamer(Integer[] inputArray, int k) {
+
+        if (k == 1) {
+            resultArray = inputArray;
+            return;
+        }
+
+        inputList.addAll(Arrays.asList(inputArray));
 
         ListIterator<Integer> iter = inputList.listIterator();
+        int indexOfLastRemoved = -11111111;
         do {
-            int currentIndex = 1;
-            int indexOfLastRemoved = 1000000000;
-            Integer currentNumber = 1000000000;
+            int fractionIndexOfK = 0;
+            Integer currentNumber = 1000000000;  // TODO: HOW TO HANDLE "variable indexOfLastRemoved might not have been initialized" ERROR WITHOUT GIVING A MAGIC VAULE TO THE DECLARED VARIABLE?
             while (iter.hasNext()) {
                 currentNumber = iter.next();
-                if (currentIndex % k == 0) {
+                if (fractionIndexOfK == k) {
                     resultList.add(currentNumber);
-                    indexOfLastRemoved = iter.previousIndex();
                     iter.remove();
+                    indexOfLastRemoved = iter.nextIndex();
+                    fractionIndexOfK = 0;
                 }
-                currentIndex++;
+                if (iter.hasNext()) {
+                    fractionIndexOfK++;
+                }
             }
 
             // Go back to beginning of list
             while (iter.hasPrevious()) {
                 iter.previous();
             }
-            currentIndex = 1;
 
-            // Step forward as many times as the remainder of k
-            int iterForward = k % indexOfLastRemoved - 1;
-            for (int i = 0; i < iterForward; i++) {
+            // Step forward as many times as the modulo of the remainder of k
+            int lastIndexOfList = inputList.size() - 1;
+            int iterForward = k - (lastIndexOfList - indexOfLastRemoved);
+            int actualIterForward = iterForward % inputList.size();
+            if (actualIterForward > 0) {
+                for (int i = 0; i < actualIterForward; i++) {
+                    currentNumber = iter.next();
+                }
+            } else {
                 currentNumber = iter.next();
-                currentIndex++;
             }
 
-            if (iter.nextIndex() == 0) {
-                currentNumber = iter.next();
-                currentIndex++;
-            }
             resultList.add(currentNumber);
             iter.remove();
+
         } while (inputList.size() > 1);
 
         if (!inputList.isEmpty()) {
             resultList.add(inputList.get(0));
         }
         resultArray = resultList.toArray(new Integer[0]);
-        return resultArray;
     }
 
     @Override
