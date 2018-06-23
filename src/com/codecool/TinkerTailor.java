@@ -23,21 +23,25 @@ class TinkerTailor {
         inputList.addAll(Arrays.asList(inputArray));
 
         ListIterator<Integer> iter = inputList.listIterator();
-        int indexOfLastRemoved = -11111111;
+
         do {
-            int fractionIndexOfK = 0;
+            int fractionIndexOfK = 1;
             Integer currentNumber = 1000000000;  // TODO: HOW TO HANDLE "variable indexOfLastRemoved might not have been initialized" ERROR WITHOUT GIVING A MAGIC VAULE TO THE DECLARED VARIABLE?
             while (iter.hasNext()) {
                 currentNumber = iter.next();
                 if (fractionIndexOfK == k) {
                     resultList.add(currentNumber);
                     iter.remove();
-                    indexOfLastRemoved = iter.nextIndex();
-                    fractionIndexOfK = 0;
+                    fractionIndexOfK = 1;
+                } else {
+                    if (iter.hasNext()) {
+                        fractionIndexOfK++;
+                    }
                 }
-                if (iter.hasNext()) {
-                    fractionIndexOfK++;
-                }
+            }
+
+            if (inputList.size() < 2) {
+                break;
             }
 
             // Go back to beginning of list
@@ -46,21 +50,32 @@ class TinkerTailor {
             }
 
             // Step forward as many times as the modulo of the remainder of k
-            int lastIndexOfList = inputList.size() - 1;
-            int iterForward = k - (lastIndexOfList - indexOfLastRemoved);
-            int actualIterForward = iterForward % inputList.size();
+            int listSize = inputList.size();
+            int iterForward = k - fractionIndexOfK;
+            int actualIterForward = iterForward % listSize;
             if (actualIterForward > 0) {
                 for (int i = 0; i < actualIterForward; i++) {
                     currentNumber = iter.next();
                 }
+                resultList.add(currentNumber);
+                iter.remove();
+
+            } else if (actualIterForward == 0) {
+                for (int i = 0; i < iterForward; i++) {
+                    currentNumber = iter.next();
+                }
+                resultList.add(currentNumber);
+                iter.remove();
+
             } else {
                 currentNumber = iter.next();
+                resultList.add(currentNumber);
+                iter.remove();
+
             }
 
-            resultList.add(currentNumber);
-            iter.remove();
-
         } while (inputList.size() > 1);
+
 
         if (!inputList.isEmpty()) {
             resultList.add(inputList.get(0));
