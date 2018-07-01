@@ -79,18 +79,27 @@ public class TestTinkerTailor {
 
         // Test 5
         sourceArray = new Integer[] {1, 2, 3, 4, 5};
-        resultExpected = new int[] {5, 1, 3, 2, 4};
+        resultExpected = new int[] {5, 1, 3, 4, 2};
         k = 5;
         actualString = runFunctionalityTest(tinkerer, sourceArray, k);
         testIndex = "5";
         printAssessment();
 
+//        // Test 6
+//        sourceArray = new Integer[] {1, 2, 3, 4, 5};
+//        resultExpected = new int[] {1, 3, 2, 5, 4};
+//        k = 6;
+//        actualString = runFunctionalityTest(tinkerer, sourceArray, k);
+//        testIndex = "6";
+//        printAssessment();
 
     }
 
     public static void main(String[] args) {
         System.out.println(funcHeader);
         runAllFunctionalityTests(new TinkerTailor());
+//        TinkerTailor test = new TinkerTailor();
+//        test.iteratorTest();
     }
 
 }

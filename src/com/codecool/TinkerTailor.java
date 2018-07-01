@@ -13,6 +13,25 @@ class TinkerTailor {
         resultArray = null;
     }
 
+    void iteratorTest() {
+        Integer[] inputArray = new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+        inputList.addAll(Arrays.asList(inputArray));
+
+        ListIterator<Integer> iter = inputList.listIterator();
+        while (iter.hasNext()) {
+            int currentElement = iter.next();
+            if (currentElement % 2 == 0) {
+                iter.remove();
+            }
+            if (!iter.hasNext()) {
+                Iterator firstElement = inputList.listIterator(4); // works!!!!!!!!!! TODO
+                System.out.println(firstElement.next());
+            }
+        }
+        System.out.println(inputList);
+    }
+
     void countingGamer(Integer[] inputArray, int k) {
 
         if (k == 1) {
@@ -23,6 +42,7 @@ class TinkerTailor {
         inputList.addAll(Arrays.asList(inputArray));
 
         ListIterator<Integer> iter = inputList.listIterator();
+
 
         do {
             int fractionIndexOfK = 1;
@@ -49,6 +69,7 @@ class TinkerTailor {
                 iter.previous();
             }
 
+            // TODO: TRY GETTING SPECIFIC ELEMENT: ELEM = IT
             // Step forward as many times as the modulo of the remainder of k
             int listSize = inputList.size();
             int iterForward = k - fractionIndexOfK;
