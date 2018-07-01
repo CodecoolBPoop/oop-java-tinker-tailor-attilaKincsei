@@ -24,12 +24,11 @@ class TinkerTailorLinkedList implements TinkerTailor {
 
         inputList.addAll(Arrays.asList(inputArray));
 
-        ListIterator<Integer> iter = inputList.listIterator();
 
         int allAroundIndex = 1;
         do {
             Integer currentChild = null;  // TODO: HOW TO HANDLE "variable indexOfLastRemoved might not have been initialized" ERROR WITHOUT GIVING A MAGIC VAULE TO THE DECLARED VARIABLE?
-//            ListIterator<Integer> iter = inputList.listIterator();
+            ListIterator<Integer> iter = inputList.listIterator();
             while (iter.hasNext()) {
 
                 currentChild = iter.next();
@@ -38,11 +37,6 @@ class TinkerTailorLinkedList implements TinkerTailor {
                     iter.remove();
                 }
                 allAroundIndex++;
-            }
-
-            // Go back to beginning of list
-            while (iter.hasPrevious()) {
-                iter.previous();
             }
 
             if (inputList.size() < 2) {
