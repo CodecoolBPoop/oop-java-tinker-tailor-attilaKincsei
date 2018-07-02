@@ -159,6 +159,11 @@ public class TestTinkerTailor {
         runPerformanceTest(testClass2, 100_000, 50);
         printForPerformanceTest(100_000, 50);
 
+        // ~0.4% threshold where array list becomes faster than linked list:
+        runPerformanceTest(testClass1, 100_000, 400);
+        runPerformanceTest(testClass2, 100_000, 400);
+        printForPerformanceTest(100_000, 400);
+
         runPerformanceTest(testClass1, 100_000, 500);
         runPerformanceTest(testClass2, 100_000, 500);
         printForPerformanceTest(100_000, 500);
