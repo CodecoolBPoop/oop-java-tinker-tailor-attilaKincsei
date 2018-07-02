@@ -134,31 +134,60 @@ public class TestTinkerTailor {
         long start = System.currentTimeMillis();
         tinkerer.countingGamer(sourceArray, k);
         long end = System.currentTimeMillis();
-        System.out.println("Performance test took " + (end - start) + " ms");
-        System.out.printf("Source Array Length = %d. K = %d", sourceArrayLength, k);
+        String dataStructureType;
+        dataStructureType = (tinkerer instanceof TinkerTailorArrayList) ? "Array List" : "Linked list";
+        System.out.printf("Test took %d ms with %s", (end - start), dataStructureType);
+        System.out.println();
+    }
+
+    private static void printForPerformanceTest(int N, int K) {
+        System.out.printf("N = %d; K = %d", N, K);
         System.out.println();
         System.out.println("---------------------------------");
     }
 
-    private static void runAllPerformanceTests(TinkerTailor testClass) {
-        runPerformanceTest(testClass, 1_000_000, 1);
-        runPerformanceTest(testClass, 1_000_000, 5);
-        runPerformanceTest(testClass, 1_000_000, 50);
-//        runPerformanceTest(testClass, 1_000_000, 500); // DO NOT RUN: IT TAKES 14_367 MS
-        runPerformanceTest(testClass, 100, 5443);
+    private static void runAllPerformanceTests(TinkerTailor testClass1, TinkerTailor testClass2) {
+        runPerformanceTest(testClass1, 100_000, 1);
+        runPerformanceTest(testClass2, 100_000, 1);
+        printForPerformanceTest(100_000, 1);
+
+        runPerformanceTest(testClass1, 100_000, 5);
+        runPerformanceTest(testClass2, 100_000, 5);
+        printForPerformanceTest(100_000, 5);
+
+        runPerformanceTest(testClass1, 100_000, 50);
+        runPerformanceTest(testClass2, 100_000, 50);
+        printForPerformanceTest(100_000, 50);
+
+        runPerformanceTest(testClass1, 100_000, 500);
+        runPerformanceTest(testClass2, 100_000, 500);
+        printForPerformanceTest(100_000, 500);
+
+        runPerformanceTest(testClass1, 100_000, 5000);
+        runPerformanceTest(testClass2, 100_000, 5000);
+        printForPerformanceTest(100_000, 5000);
+
+//        runPerformanceTest(testClass1, 100_000, 500_000);
+//        runPerformanceTest(testClass2, 100_000, 500_000);
+//        printForPerformanceTest(100_000, 500_000);
+//        ---------------------------------
+//        Test took 357 ms with Array List
+//        Test took 381192 ms with Linked list
+//        N = 100000; K = 500000
+//        ---------------------------------
+
     }
 
 
     public static void main(String[] args) {
         System.out.println("****** Functionality Tests - Linked List *******");
         runAllFunctionalityTests(new TinkerTailorLinkedList());
-//        System.out.println("****** Performance Tests - Linked List *******");
-//        runAllPerformanceTests(new TinkerTailorLinkedList());
+        System.out.println("****** Functionality Tests - Array List (Mézi) *******");
+        runAllFunctionalityTests(new TinkerTailorArrayList());
+        System.out.println();
 
-        System.out.println("****** Functionality Tests - Array List *******");
-//        runAllFunctionalityTests(new TinkerTailorArrayList());
-        System.out.println("****** Performance Tests - Array List *******");
-//        runAllPerformanceTests(new TinkerTailorArrayList());
+        System.out.println("****** Performance Tests*******");
+        runAllPerformanceTests(new TinkerTailorArrayList(), new TinkerTailorLinkedList());
 
     }
 
